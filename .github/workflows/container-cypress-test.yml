@@ -1,10 +1,10 @@
-name: Pulls Cypress Container 
+name: Builds Cypress Container with  
 
 on:
   push:
-    branches: [ container-build ]
+    branches: [ container-cypress-test]
   pull_request:
-    branches: [ container-build ]
+    branches: [ container-cypress-test ]
 
 jobs:
   build:
