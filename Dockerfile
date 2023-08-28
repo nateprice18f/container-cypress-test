@@ -1,6 +1,6 @@
 FROM natep18f/container-cypress-test:container-build
 
-RUN mkdir /node_modules
+WORKDIR /node_modules
 
 RUN cd /node_modules && \
     npm install \
