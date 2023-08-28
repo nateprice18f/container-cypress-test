@@ -1,7 +1,6 @@
 FROM natep18f/container-cypress-test:container-build
 
-WORKDIR /node_modules
-
+WORKDIR /modules
 RUN npm install \
     cypress-image-diff-js@1.28.0 \
     cypress-axe@1.4.0 \
