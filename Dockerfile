@@ -1,6 +1,6 @@
 FROM natep18f/container-cypress-test:container-build
 
-WORKDIR /cypress
+WORKDIR /config
 
 RUN npm install \
     cypress@12.17.4 \
@@ -11,4 +11,4 @@ RUN npm install \
     cypress-mochawesome-reporter@3.5.1 \
     axe-core@4.7.2
 
-CMD ["npx", "cypress", "run"]
+CMD ["npx", "cypress", "run", "--spec /config"]
