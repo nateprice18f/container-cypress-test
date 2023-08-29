@@ -11,5 +11,4 @@ RUN npm install \
     cypress-mochawesome-reporter@3.5.1 \
     axe-core@4.7.2
 
-WORKDIR /e2e
-#EXPOSE 3000 
+CMD ["npx", "cypress", "run"]
