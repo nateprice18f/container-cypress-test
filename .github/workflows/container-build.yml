@@ -20,8 +20,9 @@ jobs:
             natep18f/container-cypress-test
           tags: |
             type=ref,event=branch
+            type=semver,pattern={{major}}.{{minor}}
           flavor: |
-            latest=true
+            latest=false
       - name: Lint Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
         with:
