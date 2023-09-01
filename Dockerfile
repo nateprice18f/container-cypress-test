@@ -10,5 +10,6 @@ RUN npm install \
     cypress-mochawesome-reporter@3.5.1 \
     axe-core@4.7.2
 
+
 #RUN npx cypress run
-CMD ["npx", "cypress", "run"]
+CMD ["npx", "cypress", "run", "-c /e2e"]
