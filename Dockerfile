@@ -12,4 +12,4 @@ RUN npm install \
 
 
 #RUN npx cypress run
-CMD ["npx", "cypress", "run", "-c /e2e"]
+#CMD ["npx", "cypress", "run", "-c /e2e"]
