@@ -2,9 +2,9 @@ name: Builds Cypress Container with custom packages; Cypress UI Test
 
 on:
   push:
-    branches: [ container-cypress-test ]
+    branches: [ container-cypress-test-ui ]
   pull_request:
-    branches: [ container-cypress-test ]
+    branches: [ container-cypress-test-ui ]
 
 jobs:
   build:
