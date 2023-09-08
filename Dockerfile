@@ -11,5 +11,3 @@ RUN npm install \
     axe-core@4.7.2
 
 WORKDIR /e2e
-#RUN npx cypress run
-#CMD ["npx", "cypress", "run", "-c /e2e"]
