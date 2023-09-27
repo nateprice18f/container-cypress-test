@@ -107,15 +107,16 @@ RUN echo "whoami: $(whoami)" \
   && node -p 'module.paths' \
   # should print Cypress version
   # plus Electron and bundled Node versions
-  && cypress version \
-  && echo  " node version:    $(node -v) \n" \
-    "npm version:     $(npm -v) \n" \
-    "yarn version:    $(yarn -v) \n" \
-    "typescript version:  $(tsc -v) \n" \
-    "debian version:  $(cat /etc/debian_version) \n" \
-    "user:            $(whoami) \n" \
-    "chrome:          $(google-chrome --version || true) \n" \
-    "firefox:         $(firefox --version || true) \n"
+  && cypress version 
+#\
+ # && echo  " node version:    $(node -v) \n" \
+ #   "npm version:     $(npm -v) \n" \
+ #   "yarn version:    $(yarn -v) \n" \
+ #   "typescript version:  $(tsc -v) \n" \
+ #   "debian version:  $(cat /etc/debian_version) \n" \
+ #   "user:            $(whoami) \n" \
+ #   "chrome:          $(google-chrome --version || true) \n" \
+ #   "firefox:         $(firefox --version || true) \n"
 
 #ENTRYPOINT ["cypress", "run"]
 ENTRYPOINT ["npx" "cypress" "open"]
