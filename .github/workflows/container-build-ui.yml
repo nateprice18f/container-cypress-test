@@ -2,9 +2,9 @@ name: Pulls Cypress Container
 
 on:
   push:
-    branches: [ container-build ]
+    branches: [ container-build-ui ]
   pull_request:
-    branches: [ container-build ]
+    branches: [ container-build-ui ]
 
 jobs:
   build:
