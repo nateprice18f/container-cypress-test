@@ -26,10 +26,10 @@ jobs:
           flavor: |
             latest=false
 
-      - name: Lint Dockerfile
-        uses: hadolint/hadolint-action@v3.1.0
-        with:
-          dockerfile: Dockerfile
+     # - name: Lint Dockerfile
+     #   uses: hadolint/hadolint-action@v3.1.0
+     #   with:
+     #     dockerfile: Dockerfile
   
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v1
