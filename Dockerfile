@@ -79,14 +79,14 @@ ENV CI=1 \
 ARG CI_XBUILD
 
 # should be root user
-RUN echo "whoami: $(whoami)" \
+RUN echo whoami: $(whoami) \
   && npm config -g set user $(whoami) \
   # command "id" should print:
   # uid=0(root) gid=0(root) groups=0(root)
   # which means the current user is root
   && id \
   && npm install -g typescript \
-  && npm install -g "cypress@12.3.0" cypress-image-diff-js cypress-axe cypress-axe-core cypress-real-events cypress-mochawesome-reporter \
+  && npm install -g cypress@12.3.0 cypress-image-diff-js cypress-axe cypress-axe-core cypress-real-events cypress-mochawesome-reporter \
   && (node -p "process.env.CI_XBUILD && process.arch === 'arm64' ? 'Skipping cypress verify on arm64 due to SIGSEGV.' : process.exit(1)" \
     || (cypress verify \
     # Cypress cache and installed version
