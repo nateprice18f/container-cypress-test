@@ -2,7 +2,7 @@ FROM natep18f/container-cypress-test:container-build
 
 WORKDIR /app_modules
 RUN npm install \
-    #cypress@12.17.4 --save-dev \
+    cypress@12.17.4 --save-dev \
     cypress-image-diff-js@1.28.0 \
     cypress-axe@1.4.0 \
     cypress-axe-core@2.0.0 \
