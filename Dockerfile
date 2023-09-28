@@ -7,7 +7,9 @@ ARG CHROME_VERSION='107.0.5304.121-1'
 ARG EDGE_VERSION='100.0.1185.29-1'
 ARG FIREFOX_VERSION='107.0'
 
-FROM natep18f/container-cypress-test:container-build-ui
+#FROM natep18f/container-cypress-test:container-build-ui
+
+FROM cypress/factory
 
 #COPY . /opt/app
 WORKDIR /e2e
