@@ -13,3 +13,4 @@ FROM natep18f/container-cypress-test:container-build-ui
 WORKDIR /e2e
 
 RUN npm install -g cypress cypress-image-diff-js cypress-axe cypress-axe-core cypress-real-events cypress-mochawesome-reporter
+ENTRYPOINT ["npx" "cypress" "open"]
