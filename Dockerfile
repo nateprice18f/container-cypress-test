@@ -1,124 +1,15 @@
+# Args are defined in the Dockerfile before the FROM command.
+# Using these args will cause an image to be created with node (default version is 16.18.1), chrome, firefox and edge.
+ARG CYPRESS_VERSION='12.1.0'
+ARG NODE_VERSION='16.18.1'
+ARG YARN_VERSION='1.22.19'
+ARG CHROME_VERSION='107.0.5304.121-1'
+ARG EDGE_VERSION='100.0.1185.29-1'
+ARG FIREFOX_VERSION='107.0'
+
 FROM natep18f/container-cypress-test:container-build-ui
 
-USER root
+#COPY . /opt/app
+WORKDIR /e2e
 
-RUN node --version
-
-COPY ./global-profile.sh /tmp/global-profile.sh
-RUN cat /tmp/global-profile.sh >> /etc/bash.bashrc && rm /tmp/global-profile.sh
-
-# Install dependencies
-RUN apt-get update && \
-  apt-get install -y \
-  fonts-liberation \
-  git \
-  libcurl4 \
-  libcurl3-gnutls \
-  libcurl3-nss \
-  xdg-utils \
-  wget \
-  curl \
-  # firefox dependencies
-  bzip2 \
-  # add codecs needed for video playback in firefox
-  # https://github.com/cypress-io/cypress-docker-images/issues/150
-  mplayer \
-  \
-  # clean up
-  && rm -rf /var/lib/apt/lists/* \
-  && apt-get clean
-
-# install libappindicator3-1 - not included with Debian 11
-RUN wget --no-verbose /usr/src/libappindicator3-1_0.4.92-7_amd64.deb "http://ftp.us.debian.org/debian/pool/main/liba/libappindicator/libappindicator3-1_0.4.92-7_amd64.deb" && \
-  dpkg -i /usr/src/libappindicator3-1_0.4.92-7_amd64.deb ; \
-  apt-get install -f -y && \
-  rm -f /usr/src/libappindicator3-1_0.4.92-7_amd64.deb
-
-# install Chrome browser
-RUN node -p "process.arch === 'arm64' ? 'Not downloading Chrome since we are on arm64: https://crbug.com/677140' : process.exit(1)" || \
-  (wget --no-verbose -O /usr/src/google-chrome-stable_current_amd64.deb "http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_105.0.5195.102-1_amd64.deb" && \
-  dpkg -i /usr/src/google-chrome-stable_current_amd64.deb ; \
-  apt-get install -f -y && \
-  rm -f /usr/src/google-chrome-stable_current_amd64.deb)
-
-# "fake" dbus address to prevent errors
-# https://github.com/SeleniumHQ/docker-selenium/issues/87
-ENV DBUS_SESSION_BUS_ADDRESS=/dev/null
-
-# install Firefox browser
-RUN node -p "process.arch === 'arm64' ? 'Not downloading Firefox since we are on arm64: https://bugzilla.mozilla.org/show_bug.cgi?id=1678342' : process.exit(1)" || \
-  (wget --no-verbose -O /tmp/firefox.tar.bz2 https://download-installer.cdn.mozilla.net/pub/firefox/releases/104.0.1/linux-x86_64/en-US/firefox-104.0.1.tar.bz2 && \
-  tar -C /opt -xjf /tmp/firefox.tar.bz2 && \
-  rm /tmp/firefox.tar.bz2 && \
-  ln -fs /opt/firefox/firefox /usr/bin/firefox)
-
-# a few environment variables to make NPM installs easier
-# good colors for most applications
-ENV TERM=xterm
-# avoid million NPM install messages
-ENV npm_config_loglevel=warn
-# allow installing when the main user is root
-ENV npm_config_unsafe_perm=true
-
-# avoid too many progress messages
-# https://github.com/cypress-io/cypress/issues/1243
-ENV CI=1 \
-# disable shared memory X11 affecting Cypress v4 and Chrome
-# https://github.com/cypress-io/cypress-docker-images/issues/270
-  QT_X11_NO_MITSHM=1 \
-  _X11_NO_MITSHM=1 \
-  _MITSHM=0 \
-  # point Cypress at the /root/cache no matter what user account is used
-  # see https://on.cypress.io/caching
-  CYPRESS_CACHE_FOLDER=/root/.cache/Cypress \
-  # Allow projects to reference globally installed cypress
-  NODE_PATH=/usr/local/lib/node_modules
-
-# CI_XBUILD is set when we are building a multi-arch build from x64 in CI.
-# This is necessary so that local `./build.sh` usage still verifies `cypress` on `arm64`.
-ARG CI_XBUILD
-
-# should be root user
-RUN echo whoami: $(whoami) \
-  && npm config -g set user $(whoami) \
-  # command "id" should print:
-  # uid=0(root) gid=0(root) groups=0(root)
-  # which means the current user is root
-  && id \
-  && npm install -g typescript \
-  && npm install -g cypress@12.3.0 cypress-image-diff-js cypress-axe cypress-axe-core cypress-real-events cypress-mochawesome-reporter \
-  && (node -p "process.env.CI_XBUILD && process.arch === 'arm64' ? 'Skipping cypress verify on arm64 due to SIGSEGV.' : process.exit(1)" \
-    || (cypress verify \
-    # Cypress cache and installed version
-    # should be in the root user's home folder
-    && cypress cache path \
-    && cypress cache list \
-    && cypress info \
-    && cypress version)) \
-  # give every user read access to the "/root" folder where the binary is cached
-  # we really only need to worry about the top folder, fortunately
-  && ls -la /root \
-  && chmod 755 /root \
-  # always grab the latest Yarn
-  # otherwise the base image might have old versions
-  # NPM does not need to be installed as it is already included with Node.
-  && npm i -g yarn@latest \
-  # Show where Node loads required modules from
-  && node -p 'module.paths' \
-  # should print Cypress version
-  # plus Electron and bundled Node versions
-  && cypress version 
-#\
- # && echo  " node version:    $(node -v) \n" \
- #   "npm version:     $(npm -v) \n" \
- #   "yarn version:    $(yarn -v) \n" \
- #   "typescript version:  $(tsc -v) \n" \
- #   "debian version:  $(cat /etc/debian_version) \n" \
- #   "user:            $(whoami) \n" \
- #   "chrome:          $(google-chrome --version || true) \n" \
- #   "firefox:         $(firefox --version || true) \n"
-
-#ENTRYPOINT ["cypress", "run"]
-ENTRYPOINT ["npx" "cypress" "open"]
-
-
+RUN npm install -g cypress cypress-image-diff-js cypress-axe cypress-axe-core cypress-real-events cypress-mochawesome-reporter
