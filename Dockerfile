@@ -10,10 +10,9 @@ ARG FIREFOX_VERSION='118.0'
 #FROM natep18f/container-cypress-test:container-build-ui
 
 FROM cypress/factory
-
-#COPY . /opt/app
 WORKDIR /e2e
+#COPY . /opt/app
 
+WORKDIR /cypress_ui
 RUN npm install -g cypress cypress-image-diff-js cypress-axe cypress-axe-core cypress-real-events cypress-mochawesome-reporter
-
 ENTRYPOINT [ "yarn" "run" "cypress" "open" ]
