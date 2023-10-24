@@ -6,4 +6,4 @@ services:
        - type: bind
          source: /path/to/local/storage or ENV Example: ${PWD}
          target: /path/to/container/storage
-         read_only: true
+         read_only: false
