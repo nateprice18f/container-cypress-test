@@ -1,0 +1,9 @@
+version: '3'
+services:
+  cypress-test-container:
+     image: <container image>
+     volumes:
+       - type: bind
+         source: /path/to/local/storage or ENV Example: ${PWD}
+         target: /path/to/container/storage
+         read_only: true
