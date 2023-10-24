@@ -1,4 +1,4 @@
-# Cypress Container Docker Compose 
+# Docker Compose Container Setup
 
 1. Replace image: ```Container image``` with the correct container image
 2. Save the dockercompose.yml
