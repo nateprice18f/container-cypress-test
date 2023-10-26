@@ -1,7 +1,7 @@
 # Cypress Container Test Repo
 
 > **Warning**
-> The work done within this repo is proof of concept and should be used as a starting point for future work.
+> The work done within this repo are proof of concept and should be used as a starting point for future work.
 
 ## Cypress Container
 This container repo makes use of the upstearm Cypress container. Cypress is deployed within the container as a global installation with the working directory being /e2e. The config.js needs to be in the root directory.
