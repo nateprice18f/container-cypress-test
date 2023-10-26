@@ -1,6 +1,10 @@
 # Cypress Container Test Repo
 
+> **Warning**
+> The work done within this repo is proof of concept and should be used as a starting point for future work.
+
 ## Cypress Container
+This container repo makes use of the upstearm Cypress container. Cypress is deployed within the container as a global installation with the working directory being /e2e. The config.js needs to be in the root directory.
 
 ### The Cypress repo brokendown into a few different branches
 - Main branch only used to create and maintain templates of action workflows, Dockerfile and other supporting artifacts as needed 
